@@ -59,6 +59,7 @@ en:
     subject_changed: "Subject changed"
     other_attr_changed: "Other changes"
     description_changed: "Description changed"
+    due_date_changed: "Due date changed"
 
   digest_template:
     short: "Short"

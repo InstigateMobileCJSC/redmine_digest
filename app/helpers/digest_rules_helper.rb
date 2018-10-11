@@ -127,6 +127,8 @@ module DigestRulesHelper
         '#DFF3FF'
       when DigestEvent::ISSUE_CREATED then
         '#e1ffe3'
+      when DigestEvent::DUE_DATE_CHANGED then
+        '#99ff99'
       else
         'gray'
     end

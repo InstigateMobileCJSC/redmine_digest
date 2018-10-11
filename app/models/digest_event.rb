@@ -9,6 +9,7 @@ module DigestEvent
   PROJECT_CHANGED     = :project_changed
   SUBJECT_CHANGED     = :subject_changed
   DESCRIPTION_CHANGED = :description_changed
+  DUE_DATE_CHANGED    = :due_date_changed
   OTHER_ATTR_CHANGED  = :other_attr_changed
 
   # order is matter. it is used in sorting
@@ -22,7 +23,8 @@ module DigestEvent
                          OTHER_ATTR_CHANGED,
                          ATTACHMENT_ADDED,
                          DESCRIPTION_CHANGED,
-                         COMMENT_ADDED]
+                         COMMENT_ADDED,
+                         DUE_DATE_CHANGED]
 
   PROP_KEYS = {
     'status_id'        => DigestEvent::STATUS_CHANGED,
@@ -31,6 +33,7 @@ module DigestEvent
     'fixed_version_id' => DigestEvent::VERSION_CHANGED,
     'project_id'       => DigestEvent::PROJECT_CHANGED,
     'subject'          => DigestEvent::SUBJECT_CHANGED,
-    'description'      => DigestEvent::DESCRIPTION_CHANGED
+    'description'      => DigestEvent::DESCRIPTION_CHANGED,
+    'due_date'         => DigestEvent::DUE_DATE_CHANGED
   }
 end
