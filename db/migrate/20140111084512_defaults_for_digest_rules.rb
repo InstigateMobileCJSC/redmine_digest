@@ -5,6 +5,8 @@ class DefaultsForDigestRules < ActiveRecord::Migration
       if rule.event_type_enabled? DigestEvent::OTHER_ATTR_CHANGED
         rule.add_event_type DigestEvent::DESCRIPTION_CHANGED
         rule.add_event_type DigestEvent::DUE_DATE_CHANGED
+        rule.add_event_type DigestEvent::WATCHER_CHANGED
+        rule.add_event_type DigestEvent::WATCHER_GROUPS_CHANGED
         rule.save
       end
     end

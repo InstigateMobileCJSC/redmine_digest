@@ -129,6 +129,10 @@ module DigestRulesHelper
         '#e1ffe3'
       when DigestEvent::DUE_DATE_CHANGED then
         '#99ff99'
+      when DigestEvent::WATCHER_CHANGED then
+        '9999ff'
+      when DigestEvent::WATCHER_GROUPS_CHANGED then
+        'ff9999'
       else
         'gray'
     end

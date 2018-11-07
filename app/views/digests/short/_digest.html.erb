@@ -41,6 +41,11 @@
                   <p style="padding-left: 60px; margin-top: 1px; margin-bottom: 5px; font-size: smaller; opacity: 0.8;">
                     <% (d_issue.changes_event_types).map do |event_type| %>
                         <% if (event = d_issue.events[event_type].last) %>
+                          <% if event_type == DigestEvent::WATCHER_CHANGED %>
+                            <% if (event.journal.visible_details.select{|x| x[:prop_key] == "notes"}.map(&:value).join("").to_s.include?("added user(s)") or
+                                   event.journal.visible_details.select{|x| x[:prop_key] == "notes"}.map(&:value).join("").to_s.include?("removed user(s)")) and
+                                  !(event.journal.visible_details.select{|x| x[:prop_key] == "notes"}.map(&:value).join("").to_s.include?("added group(s)") or
+                                   event.journal.visible_details.select{|x| x[:prop_key] == "notes"}.map(&:value).join("").to_s.include?("removed group(s)")) %>
                 <span style="margin-left: 3px; background-color: <%= event_type_color(event_type) %>">
                   <%= link_to event.formatted_value,
                               {
@@ -54,7 +59,42 @@
                               title: d_issue.events_summary(event_type),
                               style: 'color: #10152c; text-decoration: none;' %>
                 </span>
-                        <% end %>
+                            <% end %>
+                          <% elsif event_type == DigestEvent::WATCHER_GROUPS_CHANGED %>
+                            <% if (event.journal.visible_details.select{|x| x[:prop_key] == "notes"}.map(&:value).join("").to_s.include?("added group(s)") or
+                                   event.journal.visible_details.select{|x| x[:prop_key] == "notes"}.map(&:value).join("").to_s.include?("removed group(s)")) and
+                                  !(event.journal.visible_details.select{|x| x[:prop_key] == "notes"}.map(&:value).join("").to_s.include?("added user(s)") or
+                                   event.journal.visible_details.select{|x| x[:prop_key] == "notes"}.map(&:value).join("").to_s.include?("removed user(s)")) %>
+                <span style="margin-left: 3px; background-color: <%= event_type_color(event_type) %>">
+                  <%= link_to event.formatted_value,
+                              {
+                                host:       Setting.host_name,
+                                protocol:   Setting.protocol,
+                                controller: 'issues',
+                                action:     'show',
+                                id:         event.issue_id,
+                                anchor:     "note-#{event.indice}"
+                              },
+                              title: d_issue.events_summary(event_type),
+                              style: 'color: #10152c; text-decoration: none;' %>
+                </span>
+                            <% end %>
+                          <% else %> 
+                <span style="margin-left: 3px; background-color: <%= event_type_color(event_type) %>">
+                  <%= link_to event.formatted_value,
+                              {
+                                host:       Setting.host_name,
+                                protocol:   Setting.protocol,
+                                controller: 'issues',
+                                action:     'show',
+                                id:         event.issue_id,
+                                anchor:     "note-#{event.indice}"
+                              },
+                              title: d_issue.events_summary(event_type),
+                              style: 'color: #10152c; text-decoration: none;' %>
+                </span> 
+                          <% end %>
+                      <% end %>
                     <% end %>
                   </p>
               <% end %>

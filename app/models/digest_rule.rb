@@ -101,7 +101,11 @@ class DigestRule < ActiveRecord::Base
 
     journal.details.each do |jdetail|
       event = event_for_journal_detail(journal, jdetail)
+      event_for_watcher = event_for_journal_detail_watcher(journal, jdetail)
+      event_for_watcher_groups = event_for_journal_detail_watcher_groups(journal, jdetail)
       events << event if event && event_type_enabled?(event.event_type)
+      events << event_for_watcher if event_for_watcher && event_type_enabled?(event_for_watcher.event_type)
+      events << event_for_watcher_groups if event_for_watcher_groups && event_type_enabled?(event_for_watcher_groups.event_type)
     end
 
     events
@@ -147,6 +151,28 @@ class DigestRule < ActiveRecord::Base
 
     DigestEventFactory.new_event(
       DigestEvent::OTHER_ATTR_CHANGED, issue_id, created_on, user, journal, jdetail)
+  end
+
+  def event_for_journal_detail_watcher(journal, jdetail)
+    issue_id   = journal.journalized_id
+    created_on = journal.created_on
+    user       = journal.user
+
+    if jdetail.property == 'attr' && DigestEvent::PROP_KEYS_WATCHER.has_key?(jdetail.prop_key)
+      event_type = DigestEvent::PROP_KEYS_WATCHER[jdetail.prop_key]
+      return DigestEventFactory.new_event(event_type, issue_id, created_on, user, journal, jdetail)
+    end
+  end
+
+  def event_for_journal_detail_watcher_groups(journal, jdetail)
+    issue_id   = journal.journalized_id
+    created_on = journal.created_on
+    user       = journal.user
+
+    if jdetail.property == 'attr' && DigestEvent::PROP_KEYS_WATCHER_GROUPS.has_key?(jdetail.prop_key)
+      event_type = DigestEvent::PROP_KEYS_WATCHER_GROUPS[jdetail.prop_key]
+      return DigestEventFactory.new_event(event_type, issue_id, created_on, user, journal, jdetail)
+    end
   end
 
   def get_projects_scope
